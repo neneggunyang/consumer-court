@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>살까말까 소비재판소</title>
+<style>
+:root{--ink:#30414b;--muted:#71808a;--paper:#fbfdfe;--line:#d8e5eb;--accent:#78a9c1;--gold:#8eb5c8;--green:#55785c;--red:#9a5148;--yellow:#9a7a3c}
+*{box-sizing:border-box} body{margin:0;background:#edf5f8;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+button,input,textarea,select{font:inherit} button{cursor:pointer}
+.app{max-width:720px;margin:auto;min-height:100vh;background:var(--paper);box-shadow:0 0 30px #00000010}
+header{padding:28px 22px 22px;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(#f7fbfd,#e9f3f7)}
+.seal{width:58px;height:58px;margin:0 auto 9px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:27px}
+h1{font-family:Georgia,"Times New Roman",serif;font-size:27px;margin:0 0 6px;letter-spacing:-1px}
+.subtitle{font-size:13px;color:var(--muted)}
+nav{display:flex;border-bottom:1px solid var(--line);background:#fff}
+nav button{flex:1;padding:13px 5px;border:0;background:none;color:var(--muted);font-size:13px}
+nav button.active{color:var(--ink);font-weight:700;border-bottom:2px solid var(--accent)}
+main{padding:20px}
+.screen{display:none}.screen.active{display:block}
+.hero{text-align:center;padding:22px 10px 28px}
+.hero h2{font-family:Georgia,serif;font-size:24px;margin:5px 0 10px}
+.hero p{color:var(--muted);font-size:14px;line-height:1.7}
+.primary{border:0;background:var(--ink);color:white;border-radius:12px;padding:14px 20px;font-weight:700;width:100%;margin-top:12px}
+.card{background:white;border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:12px}
+.card-title{font-weight:800;margin-bottom:12px}
+label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfdfe;outline:none}
+textarea{min-height:82px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.choice{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.choice button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 8px;text-align:left;font-size:13px}
+.choice button.selected{border:2px solid var(--accent);background:#eef7fb}
+.actions{display:flex;gap:8px;margin-top:16px}.secondary{flex:1;border:1px solid var(--line);background:white;border-radius:10px;padding:12px}
+.primary.small{width:auto;flex:2;margin:0}
+.case-head{display:flex;justify-content:space-between;gap:12px;align-items:start}
+.case-name{font-weight:800;font-size:18px}.price{font-weight:800;color:var(--accent)}
+.badge{font-size:11px;padding:5px 8px;border-radius:99px;background:#e8f1f5;color:#64747d;white-space:nowrap}
+.status-green{background:#e8f0e8;color:var(--green)}.status-yellow{background:#f5efdd;color:var(--yellow)}.status-red{background:#f4e4e2;color:var(--red)}
+.empty{text-align:center;padding:35px 15px;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
+.verdict{text-align:center;padding:25px 15px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.verdict-icon{font-size:42px}.verdict h2{font-family:Georgia,serif;margin:8px 0}
+.reason{margin-top:14px;padding:14px;background:#f0f7fa;border-radius:10px;font-size:14px;line-height:1.7;text-align:left}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 8px;text-align:center}.stat b{display:block;font-size:19px;margin-bottom:3px}.stat span{font-size:11px;color:var(--muted)}
+.back{border:0;background:none;padding:0;color:var(--muted);font-size:13px;margin-bottom:12px}
+.hidden{display:none!important}
+small{color:var(--muted)}
+@media(max-width:520px){main{padding:14px}.choice{grid-template-columns:1fr}.row{flex-direction:column}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="seal">⚖</div><h1>살까말까 소비재판소</h1><div class="subtitle">사고 싶은 마음과 지갑의 증거를 함께 심리합니다.</div></header>
+<nav>
+<button class="active" data-tab="home">법정</button><button data-tab="cases">사건기록</button><button data-tab="stats">소비통계</button>
+</nav>
+<main>
+<section id="home" class="screen active">
+<div class="hero"><h2>새로운 소비재판을 열어볼까요?</h2><p>사고 싶은 물건을 법정에 세우고<br>정말 필요한 소비인지 차분히 심문해보세요.</p><button class="primary" onclick="startCase()">⚖ 새로운 소비재판 열기</button></div>
+<div id="recent"></div>
+</section>
+
+<section id="form" class="screen">
+<button class="back" onclick="show('home')">← 법정으로</button>
+<div class="card">
+<div class="card-title">📋 사건 접수</div>
+<label>사고 싶은 물건</label><input id="item" placeholder="예: 무선 키보드">
+<label>가격</label><input id="price" type="number" min="0" placeholder="예: 89000">
+<label>왜 사고 싶은가요?</label><textarea id="wantReason" placeholder="솔직하게 적어보세요. 갖고 싶다는 마음도 중요한 증거입니다."></textarea>
+<label>이미 가지고 있는 대체품이 있나요?</label><textarea id="alternative" placeholder="비슷한 물건이나 대신 사용할 수 있는 것이 있다면 적어주세요."></textarea>
+</div>
+<div class="card">
+<div class="card-title">🔎 구매 필요성</div>
+<label>얼마나 자주 사용할 것 같나요?</label>
+<div class="choice" data-key="frequency"><button>매일</button><button>주 3~5회</button><button>가끔</button><button>거의 안 씀</button></div>
+<label>지금 꼭 필요한가요?</label>
+<div class="choice" data-key="urgency"><button>지금 꼭 필요함</button><button>조금 기다려도 됨</button><button>특별히 급하지 않음</button><button>잘 모르겠음</button></div>
+<label>충동적으로 사고 싶은 마음이 얼마나 큰가요?</label>
+<div class="choice" data-key="impulse"><button>별로 없음</button><button>조금 있음</button><button>상당히 큼</button><button>지금 당장 사고 싶음</button></div>
+<label>가격만큼 충분히 사용할 자신이 있나요?</label>
+<div class="choice" data-key="value"><button>확실히 그렇다</button><button>아마 그럴 것</button><button>잘 모르겠다</button><button>아닐 것 같다</button></div>
+</div>
+<div class="actions"><button class="secondary" onclick="show('home')">취소</button><button class="primary small" onclick="submitCase()">심문하고 판결 받기 ⚖</button></div>
+</section>
+
+<section id="verdictScreen" class="screen">
+<div id="verdict"></div>
+<div class="actions"><button class="secondary" onclick="show('cases')">사건기록 보기</button><button class="primary small" onclick="startCase()">새 재판 열기</button></div>
+</section>
+
+<section id="cases" class="screen">
+<div class="card-title">📚 소비재판 사건기록</div><div id="caseList"></div>
+</section>
+
+<section id="stats" class="screen">
+<div class="card-title">📊 나의 소비재판 통계</div><div id="statView"></div>
+</section>
+</main>
+</div>
+<script>
+const KEY='consumerCourtCases_v1';
+let data=JSON.parse(localStorage.getItem(KEY)||'[]'), answers={};
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(data))}
+function show(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active'); if(id==='cases')renderCases(); if(id==='stats')renderStats(); if(id==='home')renderRecent(); window.scrollTo(0,0)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');show(b.dataset.tab)});
+document.querySelectorAll('.choice').forEach(group=>group.addEventListener('click',e=>{if(e.target.tagName!=='BUTTON')return;group.querySelectorAll('button').forEach(b=>b.classList.remove('selected'));e.target.classList.add('selected');answers[group.dataset.key]=e.target.textContent}));
+function startCase(){answers={};document.querySelectorAll('input,textarea').forEach(x=>x.value='');document.querySelectorAll('.choice button').forEach(x=>x.classList.remove('selected'));show('form')}
+function score(){
+let s=0;
+if(answers.frequency==='매일')s+=3; else if(answers.frequency==='주 3~5회')s+=2; else if(answers.frequency==='가끔')s+=1;
+if(answers.urgency==='지금 꼭 필요함')s+=3; else if(answers.urgency==='조금 기다려도 됨')s+=1;
+if(answers.impulse==='별로 없음')s+=2; else if(answers.impulse==='조금 있음')s+=1; else s-=2;
+if(answers.value==='확실히 그렇다')s+=3; else if(answers.value==='아마 그럴 것')s+=1; else if(answers.value==='아닐 것 같다')s-=2;
+if($('alternative').value.trim())s-=2;
+return s;
+}
+function submitCase(){
+const item=$('item').value.trim(), price=Number($('price').value)||0;
+if(!item){alert('사고 싶은 물건을 적어주세요.');$('item').focus();return}
+if(!price){alert('가격을 적어주세요.');$('price').focus();return}
+let s=score(), verdict=s>=7?'허가':s>=3?'보류':'기각';
+let reason=verdict==='허가'?'필요성과 사용 가치가 충분히 확인되었습니다. 다만 실제 구매 전 예산을 한 번 더 확인하세요.':verdict==='보류'?'구매하고 싶은 이유는 있지만, 긴급성이나 필요성이 아직 충분히 입증되지 않았습니다. 잠시 기다린 뒤 다시 판단해보세요.':'현재로서는 구매 필요성보다 대체 가능성 또는 충동성이 더 크게 확인되었습니다. 이번 구매는 잠시 내려놓는 것을 권합니다.';
+let c={id:Date.now(),item,price,wantReason:$('wantReason').value.trim(),alternative:$('alternative').value.trim(),answers:{...answers},verdict,reason,date:new Date().toISOString()};
+data.unshift(c);save();renderVerdict(c);show('verdictScreen')
+}
+function renderVerdict(c){
+const cfg={허가:['🟢','구매 허가','status-green'],보류:['🟡','구매 보류','status-yellow'],기각:['🔴','구매 기각','status-red']}[c.verdict];
+$('verdict').innerHTML=`<div class="verdict"><div class="verdict-icon">${cfg[0]}</div><span class="badge ${cfg[2]}">${c.verdict}</span><h2>${cfg[1]}</h2><div><b>${esc(c.item)}</b> · ${c.price.toLocaleString()}원</div><div class="reason"><b>판결 이유</b><br>${esc(c.reason)}</div>${c.verdict!=='허가'?'<p><small>💡 오늘은 사지 않고 며칠 뒤 다시 판단해보세요.</small></p>':''}</div>`;
+}
+function renderCases(){
+if(!data.length){$('caseList').innerHTML='<div class="empty">아직 열린 재판이 없습니다.<br>사고 싶은 물건을 첫 번째 피고로 세워보세요. ⚖</div>';return}
+$('caseList').innerHTML=data.map(c=>`<div class="card"><div class="case-head"><div><div class="case-name">${esc(c.item)}</div><small>${new Date(c.date).toLocaleDateString('ko-KR')}</small></div><div style="text-align:right"><span class="badge ${c.verdict==='허가'?'status-green':c.verdict==='보류'?'status-yellow':'status-red'}">${c.verdict}</span><div class="price">${c.price.toLocaleString()}원</div></div></div><div class="reason" style="margin-top:10px">${esc(c.reason)}</div></div>`).join('')
+}
+function renderRecent(){
+if(!data.length){$('recent').innerHTML='';return}
+$('recent').innerHTML='<div class="card"><div class="card-title">최근 판결</div>'+data.slice(0,3).map(c=>`<div style="display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line)"><span>${esc(c.item)}</span><span class="badge ${c.verdict==='허가'?'status-green':c.verdict==='보류'?'status-yellow':'status-red'}">${c.verdict}</span></div>`).join('')+'</div>'
+}
+function renderStats(){
+const total=data.length, denied=data.filter(c=>c.verdict==='기각').length, hold=data.filter(c=>c.verdict==='보류').length, saved=data.filter(c=>c.verdict!=='허가').reduce((a,c)=>a+c.price,0), bought=data.filter(c=>c.verdict==='허가').reduce((a,c)=>a+c.price,0);
+$('statView').innerHTML=`<div class="stats"><div class="stat"><b>${total}</b><span>총 재판</span></div><div class="stat"><b>${denied+hold}</b><span>구매하지 않은 사건</span></div><div class="stat"><b>${saved.toLocaleString()}원</b><span>지켜낸 금액</span></div></div><div class="card"><div class="card-title">판결 현황</div><p>🟢 구매 허가 <b>${data.filter(c=>c.verdict==='허가').length}건</b></p><p>🟡 구매 보류 <b>${hold}건</b></p><p>🔴 구매 기각 <b>${denied}건</b></p><small>※ '지켜낸 금액'은 보류·기각 판결을 받은 물건의 가격 합계입니다. 실제 구매 여부와는 다를 수 있어요.</small></div>`
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+renderRecent();
+</script>
+</body>
+</html>
