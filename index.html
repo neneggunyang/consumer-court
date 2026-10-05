@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>살까말까 소비재판소</title>
 <style>
-:root{--ink:#30414b;--muted:#71808a;--paper:#fbfdfe;--line:#d8e5eb;--accent:#78a9c1;--gold:#8eb5c8;--green:#55785c;--red:#9a5148;--yellow:#9a7a3c}
-*{box-sizing:border-box} body{margin:0;background:#edf5f8;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
+:root{--ink:#263746;--muted:#71808c;--paper:#f8fcff;--line:#d9e5ed;--accent:#6f9fbe;--gold:#82abc4;--green:#55785c;--red:#9a5148;--yellow:#9a7a3c}
+*{box-sizing:border-box} body{margin:0;background:#eaf3f8;color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif}
 button,input,textarea,select{font:inherit} button{cursor:pointer}
 .app{max-width:720px;margin:auto;min-height:100vh;background:var(--paper);box-shadow:0 0 30px #00000010}
-header{padding:28px 22px 22px;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(#f7fbfd,#e9f3f7)}
+header{padding:28px 22px 22px;text-align:center;border-bottom:1px solid var(--line);background:linear-gradient(#f5fbfe,#eaf4f9)}
 .seal{width:58px;height:58px;margin:0 auto 9px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:27px}
 h1{font-family:Georgia,"Times New Roman",serif;font-size:27px;margin:0 0 6px;letter-spacing:-1px}
 .subtitle{font-size:13px;color:var(--muted)}
-nav{display:flex;border-bottom:1px solid var(--line);background:#fff}
+nav{display:flex;border-bottom:1px solid var(--line);background:#ffffff}
 nav button{flex:1;padding:13px 5px;border:0;background:none;color:var(--muted);font-size:13px}
 nav button.active{color:var(--ink);font-weight:700;border-bottom:2px solid var(--accent)}
 main{padding:20px}
@@ -21,28 +21,30 @@ main{padding:20px}
 .hero{text-align:center;padding:22px 10px 28px}
 .hero h2{font-family:Georgia,serif;font-size:24px;margin:5px 0 10px}
 .hero p{color:var(--muted);font-size:14px;line-height:1.7}
-.primary{border:0;background:var(--ink);color:white;border-radius:12px;padding:14px 20px;font-weight:700;width:100%;margin-top:12px}
+.primary{border:0;background:#5f89a5;color:white;border-radius:12px;padding:14px 20px;font-weight:700;width:100%;margin-top:12px}
 .card{background:white;border:1px solid var(--line);border-radius:14px;padding:17px;margin-bottom:12px}
 .card-title{font-weight:800;margin-bottom:12px}
 label{display:block;font-size:13px;font-weight:700;margin:15px 0 7px}
-input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfdfe;outline:none}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#ffffffdfb;outline:none}
 textarea{min-height:82px;resize:vertical}
 input:focus,textarea:focus,select:focus{border-color:var(--accent)}
 .row{display:flex;gap:8px}.row>*{flex:1}
 .choice{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.choice button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 8px;text-align:left;font-size:13px}
-.choice button.selected{border:2px solid var(--accent);background:#eef7fb}
+.choice button{border:1px solid var(--line);background:#ffffff;border-radius:10px;padding:11px 8px;text-align:left;font-size:13px}
+.choice button.selected{border:2px solid var(--accent);background:#eef7fc}
 .actions{display:flex;gap:8px;margin-top:16px}.secondary{flex:1;border:1px solid var(--line);background:white;border-radius:10px;padding:12px}
 .primary.small{width:auto;flex:2;margin:0}
 .case-head{display:flex;justify-content:space-between;gap:12px;align-items:start}
 .case-name{font-weight:800;font-size:18px}.price{font-weight:800;color:var(--accent)}
-.badge{font-size:11px;padding:5px 8px;border-radius:99px;background:#e8f1f5;color:#64747d;white-space:nowrap}
+.case-actions{display:flex;justify-content:flex-end;margin-top:12px}
+.delete-btn{border:1px solid #d8e3ec;background:#f7fbff;color:#60798a;border-radius:9px;padding:7px 11px;font-size:12px}
+.badge{font-size:11px;padding:5px 8px;border-radius:99px;background:#e8f0f5;color:#607482;white-space:nowrap}
 .status-green{background:#e8f0e8;color:var(--green)}.status-yellow{background:#f5efdd;color:var(--yellow)}.status-red{background:#f4e4e2;color:var(--red)}
 .empty{text-align:center;padding:35px 15px;color:var(--muted);border:1px dashed var(--line);border-radius:14px}
-.verdict{text-align:center;padding:25px 15px;border:1px solid var(--line);border-radius:15px;background:#fff}
+.verdict{text-align:center;padding:25px 15px;border:1px solid var(--line);border-radius:15px;background:#ffffff}
 .verdict-icon{font-size:42px}.verdict h2{font-family:Georgia,serif;margin:8px 0}
-.reason{margin-top:14px;padding:14px;background:#f0f7fa;border-radius:10px;font-size:14px;line-height:1.7;text-align:left}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 8px;text-align:center}.stat b{display:block;font-size:19px;margin-bottom:3px}.stat span{font-size:11px;color:var(--muted)}
+.reason{margin-top:14px;padding:14px;background:#f0f7fb;border-radius:10px;font-size:14px;line-height:1.7;text-align:left}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.stat{background:#ffffff;border:1px solid var(--line);border-radius:12px;padding:13px 8px;text-align:center}.stat b{display:block;font-size:19px;margin-bottom:3px}.stat span{font-size:11px;color:var(--muted)}
 .back{border:0;background:none;padding:0;color:var(--muted);font-size:13px;margin-bottom:12px}
 .hidden{display:none!important}
 small{color:var(--muted)}
@@ -131,7 +133,16 @@ $('verdict').innerHTML=`<div class="verdict"><div class="verdict-icon">${cfg[0]}
 }
 function renderCases(){
 if(!data.length){$('caseList').innerHTML='<div class="empty">아직 열린 재판이 없습니다.<br>사고 싶은 물건을 첫 번째 피고로 세워보세요. ⚖</div>';return}
-$('caseList').innerHTML=data.map(c=>`<div class="card"><div class="case-head"><div><div class="case-name">${esc(c.item)}</div><small>${new Date(c.date).toLocaleDateString('ko-KR')}</small></div><div style="text-align:right"><span class="badge ${c.verdict==='허가'?'status-green':c.verdict==='보류'?'status-yellow':'status-red'}">${c.verdict}</span><div class="price">${c.price.toLocaleString()}원</div></div></div><div class="reason" style="margin-top:10px">${esc(c.reason)}</div></div>`).join('')
+$('caseList').innerHTML=data.map(c=>`<div class="card"><div class="case-head"><div><div class="case-name">${esc(c.item)}</div><small>${new Date(c.date).toLocaleDateString('ko-KR')}</small></div><div style="text-align:right"><span class="badge ${c.verdict==='허가'?'status-green':c.verdict==='보류'?'status-yellow':'status-red'}">${c.verdict}</span><div class="price">${c.price.toLocaleString()}원</div></div></div><div class="reason" style="margin-top:10px">${esc(c.reason)}</div><div class="case-actions"><button class="delete-btn" onclick="deleteCase(${c.id})">🗑 재판 기록 삭제</button></div></div>`).join('')
+}
+function deleteCase(id){
+const c=data.find(x=>x.id===id);
+if(!c)return;
+if(!confirm(`"${c.item}" 재판 기록을 삭제할까요?`))return;
+data=data.filter(x=>x.id!==id);
+save();
+renderCases();
+renderRecent();
 }
 function renderRecent(){
 if(!data.length){$('recent').innerHTML='';return}
